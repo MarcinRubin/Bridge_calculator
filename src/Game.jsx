@@ -1,12 +1,16 @@
 import Pairings from "./Pairings"
 import Deals from "./Deals"
+import Results from "./Results"
 import { useState, useEffect, createContext} from "react"
-import { calculate_mean, assign_punctation_to_subdeal, assign_punctation_to_players, zero_punctation } from "./utils/utils"
+import { calculate_mean, assign_punctation_to_subdeal, assign_punctation_to_players, zero_punctation } from "./utils/punctation"
 export const userContext = createContext()
 
 const Game = ({gamers, rounds, punctation, dealsNumber}) => {
 
-const [pairings, setPairings] = useState({0: [[0, 1],[2, 3]]});
+const [pairings, setPairings] = useState({
+    0: [[0, 1],[2, 3]]
+});
+
 const [isResult, setIsResult] = useState(false);
 const [actualRound, setActualRound] = useState("0")
 const [participants, setParticipants] = useState({
@@ -162,6 +166,11 @@ const [participants, setParticipants] = useState({
 
     const handleClick = (item) =>{
         setActualRound(round => item);
+        isResult && setIsResult(result => !result)
+    }
+
+    const switchResult = () =>{
+        setIsResult(result => !result)
     }
 
     return (
@@ -174,11 +183,11 @@ const [participants, setParticipants] = useState({
                     </button>
                 ))
             }
-            <button>WYNIKI</button>
+            <button onClick={switchResult}>WYNIKI</button>
         </div>
         <div>
         <userContext.Provider value={{handleSingleDeal, changeVulnerability}}>
-        {  
+        {!isResult &&  
             Object.keys(deals).filter(item => item === actualRound).map((item, idx)=>(
                 <>
                 <div key={idx} className="two_columns">
@@ -189,16 +198,22 @@ const [participants, setParticipants] = useState({
                 />
             
                 <Deals
-                deal = {deals[item]}
-                dealsNumber = {Object.keys(deals[item]).length}
-                actualRound = {actualRound}
+                    deal = {deals[item]}
+                    dealsNumber = {Object.keys(deals[item]).length}
+                    actualRound = {actualRound}
                 />
                 </div>
-                <button onClick={() => handlePunctation(actualRound)}>Generate</button>
+                <button onClick={() => handlePunctation(actualRound)}>PODLICZ PUNKTY</button>
                 </>
             ))
         }
         </userContext.Provider>
+        {
+            isResult && 
+            <Results
+                participants = {participants}
+            />
+        }
         
         
 
