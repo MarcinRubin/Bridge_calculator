@@ -3,6 +3,7 @@ import Deals from "./Deals"
 import Results from "./Results"
 import { useState, useEffect, createContext} from "react"
 import { calculate_mean, assign_punctation_to_subdeal, assign_punctation_to_players, zero_punctation } from "./utils/punctation"
+import { create_all_pairs } from "./utils/pairings"
 export const userContext = createContext()
 
 const Game = ({gamers, rounds, punctation, dealsNumber}) => {
@@ -58,25 +59,19 @@ const [participants, setParticipants] = useState({
         if(gamers.length % 2){
             gamers.push("DUMMY")
         }
-
         const round_keys = [...Array(Number(rounds)).keys()]
         const points_vec = round_keys.map(item =>{
             return [item, 0]
         })
         const points_obj = Object.fromEntries(points_vec);
-        console.log(points_obj);
-        
         const gamers_vec = gamers.map((item, idx) =>{
             return [idx, {name: item, points: {...points_obj}}];
         })
         const gamers_obj = Object.fromEntries(gamers_vec);
         setParticipants(prev_participants => gamers_obj);
-        console.log(gamers_obj);
         
         //CREATING ALL POSSIBLE PAIRS
-        console.log(gamers);
-        const all_pairings = create_all_pairs([...Array(gamers.length).keys()])
-        console.log(all_pairings);
+        const all_pairings = create_all_pairs(Object.keys(gamers))
         setPairings(pairings => all_pairings)
 
         //CREATE ALL DEALS
@@ -109,29 +104,7 @@ const [participants, setParticipants] = useState({
             deals_in_game[i] = {...temp_deals}
         }
         setDeals(deals => deals_in_game)
-        
     }, []);
-
-    const create_all_pairs = (arr) =>{
-        const all_gamers = arr.length
-        let row1 = arr.splice(0, Math.floor(arr.length) / 2);
-        let pairs = {
-            0: row1.map((item, idx) => {
-                return [item, arr[idx]]
-            })
-        };
-        for (let i = 1; i < all_gamers - 1; i++){
-            let to_move = row1[row1.length - 1] ;
-            row1 = [arr[0], ...row1.splice(0, row1.length - 1)]
-            arr = [...arr.splice(1, arr.length - 2), to_move, arr[arr.length - 1]]
-            //CREATE NEW PAIRING
-            pairs[i] = row1.map((item, idx) => {
-            return [item, arr[idx]];
-            })
-        }
-        console.log(pairs);
-        return pairs;
-    }
 
     const handleSingleDeal = (round, dealNumber, subdeal_number, userInput) =>{
         const temp_deals = {...deals}
@@ -188,18 +161,18 @@ const [participants, setParticipants] = useState({
         <div>
         <userContext.Provider value={{handleSingleDeal, changeVulnerability}}>
         {!isResult &&  
-            Object.keys(deals).filter(item => item === actualRound).map((item, idx)=>(
+            Object.keys(deals).filter(round => round === actualRound).map((round, idx)=>(
                 <>
                 <div key={idx} className="two_columns">
                 <Pairings
                     participants = {participants}
-                    pairing = {pairings[item]}
+                    pairing = {pairings[round]}
                     actualRound = {actualRound}
                 />
             
                 <Deals
-                    deal = {deals[item]}
-                    dealsNumber = {Object.keys(deals[item]).length}
+                    deal = {deals[round]}
+                    dealsNumber = {Object.keys(deals[round]).length}
                     actualRound = {actualRound}
                 />
                 </div>
@@ -214,13 +187,7 @@ const [participants, setParticipants] = useState({
                 participants = {participants}
             />
         }
-        
-        
-
-
-
-        </div>
-        
+        </div>    
     </div>
   )
 }
