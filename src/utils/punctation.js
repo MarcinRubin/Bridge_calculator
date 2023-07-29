@@ -35,27 +35,49 @@ export const calculate_mean = (single_deal) =>{
             mean -= Number(j.EW_ZAP);
         }
     }
+    console.log(mean);
     mean /= (Object.values(single_deal).length-1);
-    mean = Math.floor(mean / 10) * 10;
+    console.log(mean)
+    mean = parseInt(mean / 10) * 10;
     return mean
 }
 
 export const assign_punctation_to_subdeal = (j, mean) =>{
-    if(Number(j.NS_ZAP) > Number(j.EW_ZAP)){
-        if( (j.NS_ZAP - mean) < 0){
+    console.log(j);
+    console.log(mean);
+    const ns_pair = ['N', 'S']
+    const ew_pair = ['E', 'W']
+
+    if(ns_pair.includes(j.RG)){
+        if( (j.NS_ZAP - mean) < 0 ){
             j.NS_WYN = (-toIMP(mean - j.NS_ZAP))
         }
         else j.NS_WYN = toIMP(j.NS_ZAP - mean)
         j.EW_WYN = (-j.NS_WYN)
-    }
-    else{
-        if(j.EW_ZAP + mean < 0){
-                j.EW_WYN = (-toIMP(-j.EW_ZAP - mean))
         }
-        else j.EW_WYN = toIMP(j.EW_ZAP + mean)
-        j.NS_WYN = (-j.EW_WYN)
+        else{
+            if(j.EW_ZAP + mean < 0){
+                j.EW_WYN = (-toIMP(-j.EW_ZAP - mean))
+            }
+            else j.EW_WYN = toIMP(j.EW_ZAP + mean)
+            j.NS_WYN = (-j.EW_WYN)
+        }
     }
-}
+
+    // if(Number(j.NS_ZAP) > Number(j.EW_ZAP)){
+    //     if( (j.NS_ZAP - mean) < 0){
+    //         j.NS_WYN = (-toIMP(mean - j.NS_ZAP))
+    //     }
+    //     else j.NS_WYN = toIMP(j.NS_ZAP - mean)
+    //     j.EW_WYN = (-j.NS_WYN)
+    // }
+    // else{
+    //     if(j.EW_ZAP + mean < 0){
+    //             j.EW_WYN = (-toIMP(-j.EW_ZAP - mean))
+    //     }
+    //     else j.EW_WYN = toIMP(j.EW_ZAP + mean)
+    //     j.NS_WYN = (-j.EW_WYN)
+    // }
 
 export const assign_punctation_to_players = (j, pairings, participants, round) =>{
     const player1 = pairings[round][Number(j.NS)-1][0];

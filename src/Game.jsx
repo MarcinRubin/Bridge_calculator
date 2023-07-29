@@ -56,9 +56,6 @@ const [participants, setParticipants] = useState({
     
     useEffect(() => {
         //CREATING GAMERS OBJECT
-        if(gamers.length % 2){
-            gamers.push("DUMMY")
-        }
         const round_keys = [...Array(Number(rounds)).keys()]
         const points_vec = round_keys.map(item =>{
             return [item, 0]
@@ -71,7 +68,7 @@ const [participants, setParticipants] = useState({
         setParticipants(prev_participants => gamers_obj);
         
         //CREATING ALL POSSIBLE PAIRS
-        const all_pairings = create_all_pairs(Object.keys(gamers))
+        const all_pairings = create_all_pairs(gamers)
         setPairings(pairings => all_pairings)
 
         //CREATE ALL DEALS
@@ -120,7 +117,6 @@ const [participants, setParticipants] = useState({
 
     const handlePunctation = (round) =>{
         const new_deals = {...deals}
-       
         const deals_in_round = new_deals[round]
         zero_punctation(participants, round)
         const deals_iterator = Object.keys(deals_in_round);

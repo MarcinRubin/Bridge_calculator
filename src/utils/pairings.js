@@ -1,5 +1,22 @@
-export const create_all_pairs = (arr) =>{
-    const all_gamers = arr.length
+export const create_all_pairs = (gamers) =>{
+    let arr = Object.keys(gamers)
+    let all_gamers = arr.length
+    console.log(arr);
+    
+    //shuffle gamer table
+    //for (let i = all_gamers - 1; i > 0; i--) {
+    //    const j = Math.floor(Math.random() * (i + 1));
+    //    [arr[i], arr[j]] = [arr[j], arr[i]];
+    //}
+
+    //add dummy players
+    if(all_gamers % 2){
+        arr.push("DUMMY")
+        all_gamers += 1
+    }
+
+    console.log(arr);
+
     let row1 = arr.splice(0, Math.floor(arr.length) / 2);
     let pairs = {
         0: row1.map((item, idx) => {
