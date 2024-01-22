@@ -16,7 +16,7 @@ and for testing the capabilities of react js. If you are looking for a straighfo
 ## Technologies Used
 <ul>
   <li>JavaScript</li>
-  <li>React</li>li>
+  <li>React</li>
   <li>HTML5 & CSS3</li>
 </ul>
 
