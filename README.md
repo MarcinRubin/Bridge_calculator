@@ -33,9 +33,9 @@ Just click <a href="https://marcinrubin.github.io/Bridge_calculator/">here</a> t
   - Results tables for each round are generated.
   - DO NOT REFRESH THE PAGE! Data is not stored locally and will be lost when the page is reloaded.
   - Fill the table using the standard bridge notation like (you have to click "ok" for wach row to calculate):
-    - 3NT, N, =
-    - 5DX, S, -1
-    - 4S, E, 2
+    - 3NT, N, 0 (contract: 3 non trump, player: N, number of tricks are equal to declared)
+    - 5DX, S, -1 (contract: 5 diamonds with double, player: S, one trick short to win)
+    - 4S, E, 2 (contract: 4 spades, player: E, two additional tricks taken)
   - If the input is invalid, the calculation will not be performed.
   - When the table is full, use the button at the bottom to get a final result for the round.
 
